@@ -1,3 +1,4 @@
+// Teste GIT
 class Memory {
   static const operations = const ['%', '/', 'X', '-', '+', '=', 'Oskey'];
   String _value = '0';
@@ -5,7 +6,7 @@ class Memory {
   int _bufferIndex = 0;
   bool _wipeValue = false;
   bool _newOperation = false;
-  bool _postOperation = false;
+  // bool _postOperation = false;
   String get value => _value;
   double total = 0;
 
