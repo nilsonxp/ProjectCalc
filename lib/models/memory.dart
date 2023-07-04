@@ -1,4 +1,4 @@
-// Teste GIT
+// Teste GIT > Teste 2 >
 class Memory {
   static const operations = const ['%', '/', 'X', '-', '+', '=', 'Oskey'];
   String _value = '0';
