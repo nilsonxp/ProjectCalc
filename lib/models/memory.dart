@@ -12,7 +12,6 @@ class Memory {
   String get value => _value;
 
   void applyCommand(String command) {
-    print(_lastOperation);
     if (command == 'Não Gostuei' || command == 'AC') {
       _allClear();
     } else if (operations.contains(command)) {
@@ -31,9 +30,12 @@ class Memory {
     return _value = '0';
   }
 
-  _setOperation(String newOperation) {
-    // String nextOperation = newOperation;
+  // FUNÇÃO QUE RETORNA SE O VALOR TEM RESTO OU NÁO (INT / DOUBLE)
+  String _doubleOrIntValue(double value) {
+    return value % 1 == 0 ? value.toInt().toString() : value.toString();
+  }
 
+  _setOperation(String newOperation) {
     _wipeValue = true;
 
     if (_bufferIndex == 0) {
@@ -52,43 +54,42 @@ class Memory {
       newOperation = _lastOperation;
       _lastOperation = '=';
       if (newOperation == '=') {
+        print('chegou aqui?');
         return;
       }
     }
-    // if (newOperation != _lastOperation) {
-    //   newOperation = _lastOperation;
-    // }
 
     switch (newOperation) {
       case '/':
         _total = _buffer[0] / _buffer[1];
-        _value = _total.toString();
+        _value = _doubleOrIntValue(_total);
         _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case 'X':
         _total = _buffer[0] * _buffer[1];
-        _value = _total.toString();
+        _value = _doubleOrIntValue(_total);
         _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case '-':
         _total = _buffer[0] - _buffer[1];
-        _value = _total.toString();
+        _value = _doubleOrIntValue(_total);
         _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case '+':
         _total = _buffer[0] + _buffer[1];
-        _value = _total.toString();
+        _value = _doubleOrIntValue(_total);
         _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
-      case '=':
-        _value = _buffer[0].toString();
+      case '=' || 'Oskey':
+        print('apertou igual');
+        _value = 'TO DO';
         break;
     }
-    // _lastOperation = nextOperation;
+
     _buffer[0] = double.tryParse(_value)!;
   }
 
