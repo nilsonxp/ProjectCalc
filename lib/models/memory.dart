@@ -1,6 +1,7 @@
 // Teste GIT > Teste 3 >
 class Memory {
-  static const operations = ['%', '/', 'X', '-', '+', '=', 'Oskey'];
+  static const operations = ['%', '/', 'X', '-', '+'];
+  static const equal = ['=', 'Oskey'];
   final _buffer = [0.0, 0.0];
   int _bufferIndex = 0;
   double _total = 0;
@@ -15,7 +16,17 @@ class Memory {
     if (command == 'Não Gostuei' || command == 'AC') {
       _allClear();
     } else if (operations.contains(command)) {
-      _setOperation(command);
+      if (command == '%') {
+        print('%');
+        _wipeValue = true;
+        _total = double.tryParse(_value)! / 100;
+        _value = _total.toString();
+        _buffer[_bufferIndex] = double.tryParse(_value)!;
+      } else {
+        _setOperation(command);
+      }
+    } else if (equal.contains(command)) {
+      _bufferIndex == 0 ? _bufferIndex = 0 : _setOperation(_lastOperation);
     } else {
       _addDigit(command);
     }
@@ -27,7 +38,7 @@ class Memory {
     _bufferIndex = 0;
     _waitingNextOperation = false;
     _lastOperation = '=';
-    return _value = '0';
+    _value = '0';
   }
 
   // FUNÇÃO QUE RETORNA SE O VALOR TEM RESTO OU NÁO (INT / DOUBLE)
@@ -37,6 +48,7 @@ class Memory {
 
   _setOperation(String newOperation) {
     _wipeValue = true;
+    String changeOperation;
 
     if (_bufferIndex == 0) {
       _bufferIndex++;
@@ -50,43 +62,32 @@ class Memory {
       return;
     }
 
-    if (newOperation == '=' || newOperation == 'Oskey') {
+    if (newOperation != _lastOperation) {
+      changeOperation = newOperation;
       newOperation = _lastOperation;
-      _lastOperation = '=';
-      if (newOperation == '=') {
-        print('chegou aqui?');
-        return;
-      }
+      _lastOperation = changeOperation;
     }
 
     switch (newOperation) {
       case '/':
         _total = _buffer[0] / _buffer[1];
         _value = _doubleOrIntValue(_total);
-        _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case 'X':
         _total = _buffer[0] * _buffer[1];
         _value = _doubleOrIntValue(_total);
-        _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case '-':
         _total = _buffer[0] - _buffer[1];
         _value = _doubleOrIntValue(_total);
-        _lastOperation = newOperation;
         _waitingNextOperation = false;
         break;
       case '+':
         _total = _buffer[0] + _buffer[1];
         _value = _doubleOrIntValue(_total);
-        _lastOperation = newOperation;
         _waitingNextOperation = false;
-        break;
-      case '=' || 'Oskey':
-        print('apertou igual');
-        _value = 'TO DO';
         break;
     }
 
@@ -114,7 +115,7 @@ class Memory {
     } else {
       _value += digit;
     }
-    parseValue = _value.contains(',') ? _value.split(',').join('.') : _value;
+    parseValue = _value.contains(',') ? _value.replaceAll(',', '.') : _value;
 
     _bufferIndex >= 1 ? _bufferIndex = 1 : 0;
     _buffer[_bufferIndex] = double.tryParse(parseValue) ?? 0;
