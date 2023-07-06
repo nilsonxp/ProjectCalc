@@ -30,6 +30,7 @@ class _CalculatorState extends State<Calculator> {
         children: [
           Display(text: memory.value),
           Keyboard(cb: _onPressed),
+          // SizedBox(height: 20)
         ],
       ),
     );

@@ -17,11 +17,13 @@ class Memory {
       _allClear();
     } else if (operations.contains(command)) {
       if (command == '%') {
-        print('%');
         _wipeValue = true;
+        if (_value == '0') {
+          return;
+        }
         _total = double.tryParse(_value)! / 100;
         _value = _total.toString();
-        _buffer[_bufferIndex] = double.tryParse(_value)!;
+        _buffer[0] = double.tryParse(_value)!;
       } else {
         _setOperation(command);
       }
